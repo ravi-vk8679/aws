@@ -8,6 +8,7 @@
         "vpc_cidr": {
             "Description": "CIDR Range for VPC",
             "Type": "String",
+            "AllowedPattern" : "^[0-9]./",
             "Default": "10.0.0.0/18"
         }
     },
