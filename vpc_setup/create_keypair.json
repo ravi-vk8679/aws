@@ -1,0 +1,26 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+
+    "Parameters": {
+        "KeyPairName": {
+            "Description": "What are you testing?",
+            "Type": "String"
+        }
+     },
+    "Resources" : {
+        "NewKeyPair1": {
+            "Type": "AWS::EC2::KeyPair",
+            "Properties": {
+                "KeyName": "KeyPairName"
+            }
+        }  
+    },
+    "Outputs": {
+        "test-keypair1": {
+            "Value": {"Ref": "NewKeyPair1"},
+            "Export": {
+                "Name": "test-keypair1"
+            }
+        }
+    }
+}

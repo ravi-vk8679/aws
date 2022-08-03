@@ -1,0 +1,69 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+
+    "Parameters": {
+        "TestName": {
+            "Description": "What are you testing?",
+            "Type": "String"
+        },
+        "LinuxDistro": {
+            "Description": "Which Linux Distro",
+            "Type": "String",
+            "Default": "AmazonLinux",
+            "AllowedValues": ["Debian", "AmazonLinux"]
+        }
+     },
+
+     "Mappings": {
+         "RegionAndInstanceTypeToAMIID": {
+             "us-east-1": { "Debian": "ami-04c7de39684c44e51", "AmazonLinux": "ami-a28476c2"}
+         }
+     },
+
+    "Resources" : {
+        "EC2InstanceSecurityGroup" : {
+            "Type" : "AWS::EC2::SecurityGroup",
+            "Properties" : {
+              "GroupDescription" : "Enable SSH access",
+              "GroupName" : {"Fn::Join" : ["-", ["Debian", {"Ref" : "TestName"}, "SG"]]},
+              "VpcId" : { "Fn::ImportValue" : {"Fn::Join" : ["-", [{"Ref" : "TestName"}, "VPC-ID"]]} },
+              "SecurityGroupIngress" : 
+                [   { "IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0" },
+                    { "IpProtocol" : "tcp", "FromPort" : "0", "ToPort" : "65535", "CidrIp" : "0.0.0.0/0" },
+                    { "IpProtocol" : "-1", "CidrIp" : "0.0.0.0/0" }
+                ]
+            }
+        },
+        "EC2Instance" : {
+            "Type" : "AWS::EC2::Instance",
+            "Properties" : {
+                "ImageId" : { "Fn::FindInMap" :  ["RegionAndInstanceTypeToAMIID", {"Ref": "AWS::Region"}, {"Ref": "LinuxDistro"}]},
+                "InstanceType" : "t2.micro",
+                "KeyName" : {"Fn::ImportValue": "test-keypair1"},
+                "NetworkInterfaces" : [
+                    {
+                        "AssociatePublicIpAddress" : true,
+                        "DeviceIndex" : 0,
+                        "SubnetId" : { "Fn::ImportValue" : {"Fn::Join" : ["-", [{"Ref" : "TestName"}, "Public-Subnet-ID"]]} },
+                        "GroupSet" : [ { "Ref" : "EC2InstanceSecurityGroup" } ]
+                
+                    }
+                ],
+                "BlockDeviceMappings" : [
+                    {
+                       "DeviceName" : "/dev/xvda",
+                       "Ebs" : {
+                         "VolumeType" : "gp2",
+                         "DeleteOnTermination" : "true",
+                         "VolumeSize" : "20"
+                       }
+                     }
+                 ],
+                "Tags" : [ 
+                {"Key" : "Name", "Value" : {"Fn::Join" : ["-", [{"Ref" : "TestName"}, "EC2Instance"]]}} 
+                ]
+            }
+        }
+        
+    }
+}
