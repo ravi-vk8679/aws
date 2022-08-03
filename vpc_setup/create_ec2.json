@@ -10,13 +10,13 @@
             "Description": "Which Linux Distro",
             "Type": "String",
             "Default": "AmazonLinux",
-            "AllowedValues": ["Debian", "AmazonLinux"]
+            "AllowedValues": ["Ubuntu", "AmazonLinux"]
         }
      },
 
      "Mappings": {
          "RegionAndInstanceTypeToAMIID": {
-             "us-east-1": { "Debian": "ami-04c7de39684c44e51", "AmazonLinux": "ami-a28476c2"}
+             "us-east-1": { "Ubuntu": "ami-052efd3df9dad4825", "AmazonLinux": "ami-090fa75af13c156b4"}
          }
      },
 
@@ -39,7 +39,7 @@
             "Properties" : {
                 "ImageId" : { "Fn::FindInMap" :  ["RegionAndInstanceTypeToAMIID", {"Ref": "AWS::Region"}, {"Ref": "LinuxDistro"}]},
                 "InstanceType" : "t2.micro",
-                "KeyName" : {"Fn::ImportValue": "test-keypair1"},
+                "KeyName" : {"Fn::ImportValue": "testKeypair1"},
                 "NetworkInterfaces" : [
                     {
                         "AssociatePublicIpAddress" : true,

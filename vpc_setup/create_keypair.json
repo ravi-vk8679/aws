@@ -19,7 +19,7 @@
         "test-keypair1": {
             "Value": {"Ref": "NewKeyPair1"},
             "Export": {
-                "Name": "test-keypair1"
+                "Name": "testKeypair1"
             }
         }
     }

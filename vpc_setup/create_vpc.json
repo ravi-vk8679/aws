@@ -12,6 +12,12 @@
             "Default": "10.0.0.0/18"
         }
     },
+    "Mappings": {
+       "RegionToAz": {
+          "us-east-1": {"AZ1": "us-east-1a", "AZ2": "us-east-1b"}
+       }
+
+    },
     "Resources" : {
        "Vpc" : {
           "Type" : "AWS::EC2::VPC",
@@ -55,7 +61,7 @@
        "PublicSubnet" : {
           "Type" : "AWS::EC2::Subnet",
           "Properties" : {
-             "AvailabilityZone" : "us-west-2a",
+             "AvailabilityZone" : { "Fn::FindInMap": ["RegionToAz", {"Ref": "AWS::Region"}, "AZ1"]},
              "CidrBlock" : "10.0.1.0/24",
              "VpcId" : {"Ref" : "Vpc"},
              "Tags" : [
@@ -66,7 +72,7 @@
        "PrivateSubnet" : {
           "Type" : "AWS::EC2::Subnet",
           "Properties" : {
-             "AvailabilityZone" : "us-west-2b",
+             "AvailabilityZone" : { "Fn::FindInMap": ["RegionToAz", {"Ref": "AWS::Region"}, "AZ2"]},
              "CidrBlock" : "10.0.2.0/24",
              "VpcId" : {"Ref" : "Vpc"},
              "Tags" : [
