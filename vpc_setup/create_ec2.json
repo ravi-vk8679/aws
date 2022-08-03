@@ -16,7 +16,8 @@
 
      "Mappings": {
          "RegionAndInstanceTypeToAMIID": {
-             "us-east-1": { "Ubuntu": "ami-052efd3df9dad4825", "AmazonLinux": "ami-090fa75af13c156b4"}
+             "us-east-1": { "Ubuntu": "ami-052efd3df9dad4825", "AmazonLinux": "ami-090fa75af13c156b4"},
+             "us-west-2": { "Ubuntu": "ami-0d70546e43a941d70", "AmazonLinux": "ami-0cea098ed2ac54925"}
          }
      },
 
