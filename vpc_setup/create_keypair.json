@@ -16,7 +16,7 @@
         }  
     },
     "Outputs": {
-        "test-keypair1": {
+        "testKeypair1": {
             "Value": {"Ref": "NewKeyPair1"},
             "Export": {
                 "Name": "testKeypair1"
